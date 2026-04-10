@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://glamourwebsite.com.ng/sitemap.xml
