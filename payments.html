@@ -1,121 +1,338 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0b0b0c" />
-  <meta name="description" content="A redesigned Glamour payments page with cleaner country selection, plan cards, payment details, and proof submission." />
-  <meta name="robots" content="index,follow" />
-  <link rel="canonical" href="https://glamourwebsite.com.ng/payments.html" />
-  <title>Glamour Payments — Country-Based Payment Screen</title>
-  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#080707" />
+  <meta name="description" content="Glamour — Pay your registration fee and get activated today." />
+  <title>Glamour — Register &amp; Get Activated</title>
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
-  <link rel="icon" href="assets/icons/favicon.ico" sizes="any" />
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Glamour Payments — Country-Based Payment Screen" />
-  <meta property="og:description" content="A redesigned Glamour payments page with cleaner country selection, plan cards, payment details, and proof submission." />
-  <meta property="og:url" content="https://glamourwebsite.com.ng/payments.html" />
-  <meta property="og:image" content="https://glamourwebsite.com.ng/assets/glamour-hero.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Glamour Payments — Country-Based Payment Screen" />
-  <meta name="twitter:description" content="A redesigned Glamour payments page with cleaner country selection, plan cards, payment details, and proof submission." />
-  <meta name="twitter:image" content="https://glamourwebsite.com.ng/assets/glamour-hero.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-  <link rel="stylesheet" href="assets/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #080707;
+      --surface: #111010;
+      --card:    #161414;
+      --border:  rgba(255,255,255,0.07);
+      --text:    #ede8df;
+      --muted:   rgba(237,232,223,0.4);
+      --gold:    #c8962c;
+      --gold2:   #dba93c;
+      --gold3:   #efc96e;
+      --radius:  14px;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient glow — very subtle */
+    body::before {
+      content: '';
+      position: fixed;
+      width: 600px; height: 500px;
+      background: radial-gradient(ellipse, rgba(200,150,44,0.07) 0%, transparent 65%);
+      top: -120px; left: 50%; transform: translateX(-50%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* Gold hairline top */
+    body::after {
+      content: '';
+      position: fixed; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold2) 35%, var(--gold3) 50%, var(--gold2) 65%, transparent);
+      z-index: 100;
+    }
+
+    /* ── WRAPPER ── */
+    .wrapper {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 400px;
+      display: flex; flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── BRAND ── */
+    .brand {
+      display: flex; flex-direction: column; align-items: center;
+      margin-bottom: 32px;
+      opacity: 0; animation: up 0.55s 0.05s ease forwards;
+    }
+    .brand-ring {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 1px solid rgba(200,150,44,0.4);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+      background: rgba(200,150,44,0.05);
+    }
+    .brand-ring img { width: 20px; height: 20px; }
+    .brand-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text);
+    }
+    .brand-sub {
+      font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); margin-top: 3px;
+    }
+
+    /* ── STATUS PILLS ── */
+    .pills {
+      width: 100%; display: flex; flex-direction: column; gap: 8px;
+      margin-bottom: 20px;
+    }
+    .pill {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-size: 0.78rem;
+      opacity: 0;
+    }
+    .pill-1 { animation: up 0.5s 0.15s ease forwards; }
+    .pill-2 { animation: up 0.5s 0.22s ease forwards; }
+
+    .pill-left { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+    .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; animation: blink 2.2s ease-in-out infinite; }
+    .dot-red   { background: #e05555; box-shadow: 0 0 5px rgba(224,85,85,0.5); }
+    .dot-green { background: #3bbc7a; box-shadow: 0 0 5px rgba(59,188,122,0.5); }
+    .pill-timer { font-weight: 600; font-size: 0.82rem; color: var(--gold2); font-variant-numeric: tabular-nums; letter-spacing: 0.05em; }
+    .pill-green .pill-left { color: #3bbc7a; font-weight: 500; }
+
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.35; }
+    }
+
+    /* ── MAIN CARD ── */
+    .card {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px 24px;
+      position: relative; overflow: hidden;
+      opacity: 0; animation: up 0.55s 0.3s ease forwards;
+    }
+
+    /* Glow inside card */
+    .card::before {
+      content: '';
+      position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+      width: 280px; height: 180px;
+      background: radial-gradient(ellipse, rgba(200,150,44,0.09) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Top shimmer line */
+    .card::after {
+      content: '';
+      position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200,150,44,0.4), transparent);
+    }
+
+    .card-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    .card-tag {
+      font-size: 0.62rem; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .card-flag { font-size: 1.3rem; line-height: 1; }
+
+    .amount-label {
+      font-size: 0.6rem; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+    }
+    .amount {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.8rem, 13vw, 4rem);
+      color: var(--text); line-height: 1; letter-spacing: -0.02em;
+    }
+    .amount-sub {
+      font-size: 0.73rem; color: var(--muted);
+      margin-top: 7px; font-weight: 300;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border) 30%, var(--border) 70%, transparent);
+      margin: 20px 0;
+    }
+
+    .features { display: flex; gap: 20px; }
+    .feat {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.72rem; color: var(--muted); font-weight: 300;
+    }
+    .feat-mark {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--gold2); flex-shrink: 0; opacity: 0.7;
+    }
+
+    /* ── BUTTON ── */
+    .btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; margin-top: 14px;
+      padding: 15px 24px;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.93rem; font-weight: 600;
+      letter-spacing: 0.015em;
+      text-decoration: none; border: none; cursor: pointer;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 60%, var(--gold3) 100%);
+      color: #130e00;
+      transition: all 0.22s ease;
+      box-shadow: 0 4px 22px rgba(200,150,44,0.25);
+      opacity: 0; animation: up 0.5s 0.42s ease forwards;
+      position: relative; overflow: hidden;
+    }
+    .btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+      border-radius: inherit;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(200,150,44,0.38);
+      background: linear-gradient(135deg, var(--gold2) 0%, var(--gold3) 100%);
+    }
+    .btn:active { transform: translateY(0); }
+    .arrow { transition: transform 0.2s; }
+    .btn:hover .arrow { transform: translateX(4px); }
+
+    /* ── FOOT NOTE ── */
+    .footnote {
+      margin-top: 20px;
+      font-size: 0.69rem; color: var(--muted);
+      text-align: center; line-height: 1.7;
+      opacity: 0; animation: up 0.5s 0.5s ease forwards;
+    }
+    .footnote a { color: var(--gold2); text-decoration: none; }
+    .footnote a:hover { color: var(--gold3); }
+
+    /* ── KEYFRAMES ── */
+    @keyframes up {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
 
-<a class="skip-link" href="#content">Skip to content</a>
-<header class="topbar">
-  <div class="container topbar-inner">
-    <a class="brand" href="index.html" aria-label="Glamour home">
-      <img src="assets/logo.svg" alt="Glamour logo" />
-      <div><span>Glamour</span><small>Where creativity meets luxury</small></div>
-    </a>
-    <button class="nav-toggle" type="button" aria-label="Toggle menu"><i class="fa-solid fa-bars"></i></button>
-    <nav class="nav" aria-label="Main navigation">
-      <a href="index.html">Home</a>
-      <a href="glamour-app.html">App</a>
-      <a href="how-to-register.html">Guide</a>
-      <a href="payments.html" class="active">Payments</a>
-      <a href="register.html">Register</a>
-      <a class="btn btn-primary" href="signup.html">Get started</a>
-    </nav>
-  </div>
-</header>
+<div class="wrapper">
 
-<main id="content" class="section">
-  <div class="container">
-    <div class="section-head center" data-reveal>
-      <div class="eyebrow">Payments</div>
-      <h1 style="margin:10px 0 10px;font-size:clamp(2.2rem,5vw,4rem)">Choose country, confirm plan, pay clearly</h1>
-      <p class="sub" style="margin-inline:auto">The original payment page had the core information. This version keeps that logic but presents it inside a cleaner, easier-to-navigate static layout.</p>
+  <!-- Brand -->
+  <div class="brand">
+    <div class="brand-ring">
+      <img src="assets/logo.svg" alt="Glamour" />
     </div>
-
-    <div class="form-wrap">
-      <section class="pay-panel" data-reveal>
-        <div class="eyebrow">1. Select country</div>
-        <div id="countryChoices" class="pay-choices" style="margin-top:14px"></div>
-
-        <div class="eyebrow" style="margin-top:24px">2. Select package</div>
-        <div id="planChoices" class="pay-choices" style="margin-top:14px"></div>
-
-        <div class="notice" style="margin-top:18px">Foreign payments still route through the Telegram vendor flow. Nigeria uses the Paystack checkout link from the original payment page.</div>
-      </section>
-
-      <aside class="pay-panel" data-reveal>
-        <div class="eyebrow">3. Payment details</div>
-        <h2 style="margin-top:8px">Prepared for <span data-hello-name>future creator</span></h2>
-        <div id="paymentCard" class="pay-card">
-          <dl>
-            <div><dt>Profile</dt><dd id="payProfile">your account</dd></div>
-            <div><dt>Country</dt><dd id="payCountry">Nigeria</dd></div>
-            <div><dt>Plan</dt><dd id="payPlan">Registration</dd></div>
-            <div><dt>Amount</dt><dd id="payAmount">₦14,050</dd></div>
-            <div><dt>Channel</dt><dd id="payChannel">Paystack</dd></div>
-            <div><dt>Account or wallet number</dt><dd id="payAcctNo">Online checkout</dd></div>
-            <div><dt>Account or wallet name</dt><dd id="payAcctName">Glamour via Paystack</dd></div>
-            <div><dt>Note</dt><dd id="payNote">Use the Pay Now button to complete checkout. After payment, submit proof on Telegram for activation.</dd></div>
-          </dl>
-        </div>
-        <div class="actions" style="margin-top:18px">
-          <button class="btn btn-primary" id="payNow" type="button"><i class="fa-solid fa-credit-card"></i> Pay now</button>
-          <button class="btn btn-secondary" id="submitProof" type="button"><i class="fa-brands fa-telegram"></i> Submit proof</button>
-          <button class="btn btn-secondary" type="button" data-copy="#payAcctNo"><i class="fa-regular fa-copy"></i> Copy number</button>
-        </div>
-      </aside>
-    </div>
+    <div class="brand-name">Glamour</div>
+    <div class="brand-sub">Digital Earning Platform</div>
   </div>
-</main>
 
-<footer>
-  <div class="container footer-grid">
-    <div>
-      <div class="brand" style="margin-bottom:10px">
-        <img src="assets/logo.svg" alt="Glamour logo" />
-        <div><span>Glamour</span><small>Creator landing experience</small></div>
+  <!-- Pills -->
+  <div class="pills">
+    <div class="pill pill-1">
+      <div class="pill-left">
+        <span class="dot dot-red"></span>
+        <span>Registration closes at midnight</span>
       </div>
-      <p>Glamour is presented here as a polished static website remake with stronger visual rhythm, softer motion, and cleaner page flow across every route in the original zip.</p>
+      <span class="pill-timer" id="countdown">--:--:--</span>
     </div>
-    <div>
-      <strong style="display:block;margin-bottom:10px">Pages</strong>
-      <p><a href="index.html">Home</a><br><a href="glamour-app.html">Glamour App</a><br><a href="how-to-register.html">How to Register</a><br><a href="register.html">Register</a></p>
-    </div>
-    <div>
-      <strong style="display:block;margin-bottom:10px">More</strong>
-      <p><a href="payments.html">Payments</a><br><a href="signup.html">Signup</a><br><a href="shortlink.html">Quick Links</a></p>
+    <div class="pill pill-2 pill-green">
+      <div class="pill-left">
+        <span class="dot dot-green"></span>
+        <span id="socialProof">Temi from Lagos registered 4 minutes ago</span>
+      </div>
     </div>
   </div>
-  <div class="container bottom-note">Built from the uploaded site structure and repackaged with a new UI system, reusable styles, and lightweight animations.</div>
-</footer>
-<div class="toast" id="toast">Copied.</div>
-<script src="assets/site.js"></script>
+
+  <!-- Card -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-tag">Glamour Registration</span>
+      <span class="card-flag">🇳🇬</span>
+    </div>
+    <div class="amount-label">One-Time Fee</div>
+    <div class="amount">₦14,500</div>
+    <div class="amount-sub">Pay once · Activated within 1 hour</div>
+    <div class="divider"></div>
+    <div class="features">
+      <div class="feat"><span class="feat-mark"></span> Secure via Paystack</div>
+      <div class="feat"><span class="feat-mark"></span> Instant activation</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <a class="btn"
+     href="https://paystack.shop/pay/jgi42yryfl"
+     target="_blank"
+     rel="noopener noreferrer">
+    Pay ₦14,500 on Paystack
+    <span class="arrow">→</span>
+  </a>
+
+  <!-- Footnote -->
+  <p class="footnote">
+    After payment, send proof to <a href="https://t.me/GlamourVendor" target="_blank" rel="noopener">Telegram</a> for activation.<br>
+    Need help? <a href="https://t.me/GlamourVendor" target="_blank" rel="noopener">Contact support</a>
+  </p>
+
+</div>
+
+<script>
+  /* Countdown */
+  function tick() {
+    const now = new Date(), end = new Date();
+    end.setHours(23, 59, 59, 999);
+    const d = end - now;
+    if (d <= 0) { document.getElementById('countdown').textContent = '00:00:00'; return; }
+    const p = n => String(n).padStart(2, '0');
+    document.getElementById('countdown').textContent =
+      `${p(Math.floor(d/3600000))}:${p(Math.floor(d%3600000/60000))}:${p(Math.floor(d%60000/1000))}`;
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* Social proof */
+  const proofs = [
+    'Temi from Lagos registered 4 minutes ago',
+    'Amara from Abuja registered 11 minutes ago',
+    'Chisom from Port Harcourt registered 18 minutes ago',
+    'Fatima from Kano registered 26 minutes ago',
+    'Blessing from Ibadan registered 33 minutes ago',
+    'Ngozi from Enugu registered 41 minutes ago',
+    'Seun from Lagos registered 7 minutes ago',
+  ];
+  let i = 0;
+  setInterval(() => {
+    i = (i + 1) % proofs.length;
+    const el = document.getElementById('socialProof');
+    el.style.transition = 'opacity 0.28s';
+    el.style.opacity = '0';
+    setTimeout(() => { el.textContent = proofs[i]; el.style.opacity = '1'; }, 300);
+  }, 7000);
+</script>
 
 </body>
 </html>
